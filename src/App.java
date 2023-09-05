@@ -1,17 +1,23 @@
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import java.awt.event.KeyEvent;
 import java.awt.BorderLayout;
 import java.awt.event.InputEvent;
 
+import java.util.ArrayList;
 
+//TODO: Javadocs.
 public class App {
 
     //Things it would be useful to have global access to
     private JFrame frame;
+    private ArrayList<String> fileList;
     
     public App() {
         
         frame = createFrame();
+        fileList = new ArrayList<String>();
 
         frame.setVisible(true);
     }
@@ -42,7 +48,20 @@ public class App {
         jmiOpen.setMnemonic('O');
         jmiOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
         jmiOpen.addActionListener((ae) -> {
-            //TODO: Open files
+        
+            //create file chooser
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setAcceptAllFileFilterUsed(false);
+            FileNameExtensionFilter pdfFilter = new FileNameExtensionFilter("PDF Documents", "pdf");
+            fileChooser.setFileFilter(pdfFilter);
+
+            int returnVal = fileChooser.showOpenDialog(frame);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                String filePath = fileChooser.getSelectedFile().getAbsolutePath();
+                
+                //add file to list
+                fileList.add(filePath);
+            }
         });
         jmFile.add(jmiOpen);
 
