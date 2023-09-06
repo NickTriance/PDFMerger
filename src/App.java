@@ -10,6 +10,7 @@ import java.util.ArrayList;
 //TODO: Javadocs.
 //TODO: add a gridlayout to display files
 //TODO: implement drag and drop in this view
+//TODO: set windows look and feel
 public class App {
 
     //Things it would be useful to have global access to
@@ -18,6 +19,13 @@ public class App {
     
     public App() {
         
+        //set look and feel by platform.
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            // sqaush
+        }
+
         frame = createFrame();
         fileList = new ArrayList<String>();
 
@@ -33,6 +41,10 @@ public class App {
         frame.setLayout(new BorderLayout());
         frame.setResizable(true);
         frame.setJMenuBar(createJMenuBar());
+        JPanel panel = new JPanel();
+        panel.add(new JButton("HELLO?"));
+        frame.add(panel);
+
         return frame;
     }
 
