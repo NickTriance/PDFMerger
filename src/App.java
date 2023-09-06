@@ -8,6 +8,8 @@ import java.awt.event.InputEvent;
 import java.util.ArrayList;
 
 //TODO: Javadocs.
+//TODO: add a gridlayout to display files
+//TODO: implement drag and drop in this view
 public class App {
 
     //Things it would be useful to have global access to
@@ -76,6 +78,21 @@ public class App {
 
         return jmFile;
     }
+
+    /**
+     * Removes files from the file list
+     * @param file : String, the file to be removed.
+     */
+    private void removeFile(String file) {
+        int index = -1;
+        index = fileList.indexOf(file);
+        if (index == -1) {
+            System.out.println("Error: Tried to remove a file not in the list");
+            return;
+        }
+        fileList.remove(index);
+    }
+
     public static void main(String[] args) throws Exception {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
