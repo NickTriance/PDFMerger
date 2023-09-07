@@ -3,19 +3,25 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.awt.event.KeyEvent;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.InputEvent;
 
 import java.util.ArrayList;
 
 //TODO: Javadocs.
 //TODO: add a gridlayout to display files
+//TODO: display something when no files are open
 //TODO: implement drag and drop in this view
 //TODO: set windows look and feel
 public class App {
 
     //Things it would be useful to have global access to
     private JFrame frame;
-    private ArrayList<String> fileList;
+    private JPanel contentPanel;
+    private ArrayList<String> filePaths;
     
     public App() {
         
@@ -27,7 +33,7 @@ public class App {
         }
 
         frame = createFrame();
-        fileList = new ArrayList<String>();
+        filePaths = new ArrayList<String>();
 
         frame.setVisible(true);
     }
@@ -41,9 +47,11 @@ public class App {
         frame.setLayout(new BorderLayout());
         frame.setResizable(true);
         frame.setJMenuBar(createJMenuBar());
-        JPanel panel = new JPanel();
-        panel.add(new JButton("HELLO?"));
-        frame.add(panel);
+        
+        //contentPanel = new JPanel();
+        //contentPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        //frame.add(contentPanel);
+        frame.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 
         return frame;
     }
@@ -74,7 +82,13 @@ public class App {
                 String filePath = fileChooser.getSelectedFile().getAbsolutePath();
                 
                 //add file to list
-                fileList.add(filePath);
+                filePaths.add(filePath);
+
+                String fileName = fileChooser.getSelectedFile().getName();
+                FilePanel filePanel = new FilePanel(fileName);
+                frame.add(filePanel);
+                frame.revalidate();
+                frame.repaint();
             }
         });
         jmFile.add(jmiOpen);
@@ -97,12 +111,12 @@ public class App {
      */
     private void removeFile(String file) {
         int index = -1;
-        index = fileList.indexOf(file);
+        index = filePaths.indexOf(file);
         if (index == -1) {
             System.out.println("Error: Tried to remove a file not in the list");
             return;
         }
-        fileList.remove(index);
+        filePaths.remove(index);
     }
 
     public static void main(String[] args) throws Exception {

@@ -1,50 +1,32 @@
 import javax.swing.*;
 import java.awt.GridLayout;
-public class FilePanel extends JPanel {
-    
-    private String fileName;
 
-    private JPanel panel;
-    private JLabel icon;
-    private JLabel label;
+public class FilePanel extends JPanel {
+
+    private JLabel fileLabel;
 
     public FilePanel(String filename) {
-        super();
+        setLayout(new GridLayout(2,1));
 
-        if (filename.contains("\\") || filename.contains("/")) {
-            this.fileName = parseFileName(fileName);
-        } else {
-            this.fileName = filename;
-        }
-        
-        panel = createPanel();
+        ImageIcon icon = new ImageIcon(getClass().getResource("images/file.png"));
+        JLabel iconLabel = new JLabel(null, icon, JLabel.CENTER);
+        add(iconLabel);
+
+        fileLabel = new JLabel(parseFileName(filename));
+        add(fileLabel);
     }
 
-    private JPanel createPanel() {
-        JPanel _jp = new JPanel();
-        _jp.setLayout(new GridLayout(1,2));
-
-        ImageIcon _ico = new ImageIcon(this.getClass().getResource("/images/file.png"));
-        icon = new JLabel(_ico);
-
-        label = new JLabel(fileName);
-
-        _jp.add(icon);
-        _jp.add(label);
-        
-        _jp.setVisible(true);
-
-        return _jp;
-    }
-
-    static String parseFileName(String _fileName) {
+    static String parseFileName(String _filename) {
         String s = "";
-        if (_fileName.contains("\\")) {
-            String[] split = _fileName.split("\\");
-            s = split[s.length() - 1];
+        if (!(_filename.contains("\\") || _filename.contains("/"))) {
+            return _filename;
+        }
+        if (_filename.contains("\\")) {
+            String[] split = _filename.split("\\");
+            s = split[split.length - 1];
         } else {
-            String[] split = _fileName.split("/");
-            s = split[s.length() - 1];
+            String[] split = _filename.split("/");
+            s = split[split.length - 1];
         }
         return s;
     }
