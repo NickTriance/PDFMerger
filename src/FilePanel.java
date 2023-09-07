@@ -4,6 +4,9 @@ import java.awt.GridLayout;
 public class FilePanel extends JPanel {
 
     private JLabel fileLabel;
+    private String fileName;
+    private String path;
+
 
     public FilePanel(String filename) {
         setLayout(new GridLayout(2,1));
@@ -12,7 +15,8 @@ public class FilePanel extends JPanel {
         JLabel iconLabel = new JLabel(null, icon, JLabel.CENTER);
         add(iconLabel);
 
-        fileLabel = new JLabel(parseFileName(filename));
+        fileName = parseFileName(filename);
+        fileLabel = new JLabel(fileName);
         add(fileLabel);
     }
 
@@ -29,5 +33,9 @@ public class FilePanel extends JPanel {
             s = split[split.length - 1];
         }
         return s;
+    }
+
+    public void setPath(String _path) {
+        this.path = _path;
     }
 }

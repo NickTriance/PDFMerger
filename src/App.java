@@ -10,9 +10,9 @@ import java.awt.Image;
 import java.awt.event.InputEvent;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 //TODO: Javadocs.
-//TODO: add a gridlayout to display files
 //TODO: display something when no files are open
 //TODO: implement drag and drop in this view
 //TODO: set windows look and feel
@@ -20,11 +20,10 @@ public class App {
 
     //Things it would be useful to have global access to
     private JFrame frame;
-    private JPanel contentPanel;
-    private ArrayList<String> filePaths;
+
+    private Hashtable<String, FilePanel> fileHashtable;
     
     public App() {
-        
         //set look and feel by platform.
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -33,7 +32,8 @@ public class App {
         }
 
         frame = createFrame();
-        filePaths = new ArrayList<String>();
+
+        fileHashtable = new Hashtable<String, FilePanel>();
 
         frame.setVisible(true);
     }
@@ -80,12 +80,11 @@ public class App {
             int returnVal = fileChooser.showOpenDialog(frame);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 String filePath = fileChooser.getSelectedFile().getAbsolutePath();
-                
-                //add file to list
-                filePaths.add(filePath);
 
                 String fileName = fileChooser.getSelectedFile().getName();
                 FilePanel filePanel = new FilePanel(fileName);
+
+                fileHashtable.put(filePath, filePanel);
                 frame.add(filePanel);
                 frame.revalidate();
                 frame.repaint();
@@ -109,14 +108,17 @@ public class App {
      * Removes files from the file list
      * @param file : String, the file to be removed.
      */
-    private void removeFile(String file) {
-        int index = -1;
-        index = filePaths.indexOf(file);
-        if (index == -1) {
-            System.out.println("Error: Tried to remove a file not in the list");
-            return;
-        }
-        filePaths.remove(index);
+    private void removeFile(String _filepath) {
+        //todo: implement
+        FilePanel _panel = fileHashtable.get(_filepath);
+        frame.remove(_panel);
+        refreshFrame();
+        fileHashtable.remove(_filepath);
+    }
+
+    private void refreshFrame() {
+        frame.revalidate();
+        frame.repaint();
     }
 
     public static void main(String[] args) throws Exception {
