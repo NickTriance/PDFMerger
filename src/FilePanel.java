@@ -1,4 +1,5 @@
 import javax.swing.*;
+
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
@@ -11,8 +12,6 @@ public class FilePanel extends JPanel {
     private JLabel fileLabel;
     private String fileName;
     private Point mouseOffset;
-    private String path;
-
 
     public FilePanel(String filename) {
         setLayout(new GridLayout(2,1));
@@ -22,7 +21,7 @@ public class FilePanel extends JPanel {
         add(iconLabel);
 
         fileName = parseFileName(filename);
-        fileLabel = new JLabel(fileName);
+        fileLabel = new JLabel(fileName, JLabel.CENTER);
         add(fileLabel);
 
         //add a mouse listener for drag and drop
@@ -62,9 +61,5 @@ public class FilePanel extends JPanel {
             s = split[split.length - 1];
         }
         return s;
-    }
-
-    public void setPath(String _path) {
-        this.path = _path;
     }
 }

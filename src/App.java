@@ -1,30 +1,23 @@
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.awt.event.KeyEvent;
-import java.io.IOException;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.InputEvent;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
+import java.io.IOException;
 
 //TODO: Javadocs.
 //TODO: display something when no files are open
 //TODO: implement drag and drop in this view
+//TODO: should separate file handling logic from the ui
 public class App {
 
     //Things it would be useful to have global access to
     private JFrame frame;
 
-    private Hashtable<String, FilePanel> fileHashtable; //for storing files and their panels.
-    private ArrayList<String> fileList; //for keeping track of the order of files in the merger.
     
     public App() {
         //set look and feel by platform.
@@ -34,10 +27,8 @@ public class App {
             // sqaush
         }
 
+        FileManager.init(this);
         frame = createFrame();
-
-        fileHashtable = new Hashtable<String, FilePanel>();
-        fileList = new ArrayList<String>();
 
         frame.setVisible(true);
     }
@@ -109,7 +100,6 @@ public class App {
         jmiSave.setMnemonic('S');
         jmiSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
         jmiSave.addActionListener((ae) -> {
-            //TODO: This is the part where the PDFS will be combined and saved
             mergeFiles();
         });
         jmFile.add(jmiSave);
@@ -153,29 +143,7 @@ public class App {
 
     /**Adds files to the file list. */
     private void addFile() {
-        
-        //create file chooser
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setAcceptAllFileFilterUsed(false);
-        FileNameExtensionFilter pdfFilter = new FileNameExtensionFilter("PDF Documents", "pdf");
-        fileChooser.setFileFilter(pdfFilter);
-        //open the file chooser
-        int returnVal = fileChooser.showOpenDialog(frame);
-        //add the file
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            String filePath = fileChooser.getSelectedFile().getAbsolutePath();
-            String fileName = fileChooser.getSelectedFile().getName();
-            FilePanel filePanel = new FilePanel(fileName);
-            //ensure that we don't open duplicates.
-            if (fileList.contains(filePath)) {
-                JOptionPane.showMessageDialog(frame, "Selected file is already open.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            } 
-            fileHashtable.put(filePath, filePanel);
-            fileList.add(filePath);
-            frame.add(filePanel);
-            refreshFrame();
-        }
+        FileManager.openFile();
     }
     
     /**
@@ -183,31 +151,20 @@ public class App {
      * @param file : String, the file to be removed.
      */
     private void removeFile(String _filepath) {
-        //todo: implement
-        FilePanel _panel = fileHashtable.get(_filepath);
-        frame.remove(_panel);
-        refreshFrame();
-        fileHashtable.remove(_filepath);
-        fileList.remove(_filepath);
+        FileManager.removeFile(_filepath);
     }
 
     private void mergeFiles() {
-        String[] files = fileList.toArray(new String[0]);
-        JFileChooser fileChooser = new JFileChooser();
-        int saveChoice = fileChooser.showSaveDialog(frame);
-        if (saveChoice == JFileChooser.APPROVE_OPTION) {
-            try {
-                PDFMerger.merge(files, fileChooser.getSelectedFile().getAbsolutePath());
-                JOptionPane.showMessageDialog(frame, "Done", null, JOptionPane.INFORMATION_MESSAGE);
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(frame, "Failed to save file " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
+        FileManager.mergeFiles();
     }
 
-    private void refreshFrame() {
+    public void refreshFrame() {
         frame.revalidate();
         frame.repaint();
+    }
+
+    public JFrame getFrame() {
+        return frame;
     }
 
     public static void main(String[] args) throws Exception {
