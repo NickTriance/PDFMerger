@@ -3,6 +3,7 @@ import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.InputEvent;
@@ -10,13 +11,13 @@ import java.awt.event.InputEvent;
 import java.io.IOException;
 
 //TODO: Javadocs.
-//TODO: display something when no files are open
-//TODO: implement drag and drop in this view
-//TODO: should separate file handling logic from the ui
 public class App {
 
     //Things it would be useful to have global access to
     private JFrame frame;
+    private JLabel noFilesLabel;
+
+    public static App app;
 
     
     public App() {
@@ -28,6 +29,14 @@ public class App {
         }
 
         FileManager.init(this);
+
+        //set up singleton
+        if (app == null) {
+            app = this;
+        } else {
+            System.exit(1);
+        }
+
         frame = createFrame();
 
         frame.setVisible(true);
@@ -36,16 +45,16 @@ public class App {
     private JFrame createFrame() {
         JFrame frame = new JFrame();
         frame.setSize(640,480);
-        frame.setTitle("PDFMerger");
+        frame.setTitle(AppStrings.APP_TITLE);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setLayout(new BorderLayout());
         frame.setResizable(true);
         frame.setJMenuBar(createJMenuBar());
         
-        //contentPanel = new JPanel();
-        //contentPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        //frame.add(contentPanel);
+        noFilesLabel = createNoFileLabel();
+        frame.add(noFilesLabel);
+
         frame.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 
         frame.setTransferHandler(new TransferHandler("text") {
@@ -79,25 +88,32 @@ public class App {
         return jmb;
     }
 
+    private JLabel createNoFileLabel() {
+        JLabel _jlab = new JLabel(AppStrings.APP_NO_FILES);
+        _jlab.setFont(new Font(_jlab.getFont().getName(), Font.PLAIN, AppConstants.NO_FILE_LABEL_SIZE));
+        _jlab.setHorizontalAlignment(JLabel.CENTER);
+        return _jlab;
+    }
+
     /**
      * Creates the File menu on the menu bar.
      * @return FileMenu: JMenu
      */
     private JMenu createFileMenu() {
-        JMenu jmFile = new JMenu("File");
-        jmFile.setMnemonic('F');
+        JMenu jmFile = new JMenu(AppStrings.APP_MENU_FILE);
+        jmFile.setMnemonic(AppConstants.APP_MNEMONIC_FILE);
 
         //create the menu for opening files
-        JMenuItem jmiOpen = new JMenuItem("Open");
-        jmiOpen.setMnemonic('O');
+        JMenuItem jmiOpen = new JMenuItem(AppStrings.APP_MENU_FILE_OPEN);
+        jmiOpen.setMnemonic(AppConstants.APP_MNEMONIC_OPEN);
         jmiOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
         jmiOpen.addActionListener((ae) -> {
             addFile();
         });
         jmFile.add(jmiOpen);
 
-        JMenuItem jmiSave = new JMenuItem("Save/Export");
-        jmiSave.setMnemonic('S');
+        JMenuItem jmiSave = new JMenuItem(AppStrings.APP_MENU_FILE_SAVE);
+        jmiSave.setMnemonic(AppConstants.APP_MNEMONIC_SAVE);
         jmiSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
         jmiSave.addActionListener((ae) -> {
             mergeFiles();
@@ -108,41 +124,31 @@ public class App {
     }
 
     private JMenu createHelpMenu() {
-        JMenu jmHelp = new JMenu("Help");
-        jmHelp.setMnemonic('H');
+        JMenu jmHelp = new JMenu(AppStrings.APP_MENU_HELP);
+        jmHelp.setMnemonic(AppConstants.APP_MNEMONIC_HELP);
 
-        JMenuItem jmiHelp = new JMenuItem("View Help");
-        jmiHelp.setMnemonic('H');
+        JMenuItem jmiHelp = new JMenuItem(AppStrings.APP_MENU_HELP_VIEW);
+        jmiHelp.setMnemonic(AppConstants.APP_MNEMONIC_HELP);
         jmiHelp.addActionListener((ae) -> {
-            JOptionPane.showMessageDialog(frame, "Add PDF files with File -> Open. \nArrange with drag and drop. \nExport with File -> Save/Export.", "Help", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(frame, AppStrings.APP_MENU_HELP_VIEW_STRING, AppStrings.APP_MENU_HELP, JOptionPane.INFORMATION_MESSAGE);
         });
         jmHelp.add(jmiHelp);
 
         jmHelp.addSeparator();
 
-        JMenuItem jmiAbout = new JMenuItem("About...");
-        jmiAbout.setMnemonic('A');
+        JMenuItem jmiAbout = new JMenuItem(AppStrings.APP_MENU_HELP_ABOUT);
+        jmiAbout.setMnemonic(AppConstants.APP_MNEMONIC_ABOUT);
         jmiAbout.addActionListener((ae) -> {
-            JOptionPane.showMessageDialog(frame, "PDFMerger V0.1 by NickTriance\n www.nicktriance.com", "About", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(frame, AppStrings.APP_MENU_HELP_ABOUT_STRING, AppStrings.APP_MENU_HELP_ABOUT_TITLE, JOptionPane.INFORMATION_MESSAGE);
         });
         jmHelp.add(jmiAbout);
 
         return jmHelp;
     }
-    private JPopupMenu createPopupMenu() { 
-        JPopupMenu _jpm = new JPopupMenu(null);
-       
-        JMenuItem jpmDel = new JMenuItem("Delete");
-        jpmDel.setMnemonic('D');
-        jpmDel.addActionListener((ae) -> {
-            //todo: remove file
-        });
-
-        return _jpm;
-    }
-
+ 
     /**Adds files to the file list. */
     private void addFile() {
+        frame.remove(noFilesLabel);
         FileManager.openFile();
     }
     
@@ -150,8 +156,12 @@ public class App {
      * Removes files from the file list
      * @param file : String, the file to be removed.
      */
-    private void removeFile(String _filepath) {
+    public void removeFile(String _filepath) {
         FileManager.removeFile(_filepath);
+        if (FileManager.getFileListSize() == 0) {
+            frame.add(noFilesLabel);
+            refreshFrame();
+        }
     }
 
     private void mergeFiles() {

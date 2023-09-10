@@ -144,8 +144,6 @@ public class FileManager {
                 break; //we've found where we are supposed to go
             }
         }
-
-        System.out.println(fileList.toString());
         redrawFiles();
     }
 
@@ -167,5 +165,9 @@ public class FileManager {
 
     public static int getIndex(String filePath) {
         return fileList.indexOf(filePath);
+    }
+
+    public static int getFileListSize() {
+        return fileList.size();
     }
 }
