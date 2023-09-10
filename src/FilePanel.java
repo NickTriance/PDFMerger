@@ -7,11 +7,13 @@ import java.awt.event.MouseEvent;
 
 public class FilePanel extends JPanel {
 
-    private static final int GRID_CELL_SIZE = 500; //size of the grid for drag and drop
+    private static final int GRID_CELL_SIZE = 50; //size of the grid for drag and drop
 
     private JLabel fileLabel;
     private String fileName;
     private Point mouseOffset;
+
+    private String filepath;
 
     public FilePanel(String filename) {
         setLayout(new GridLayout(2,1));
@@ -46,6 +48,17 @@ public class FilePanel extends JPanel {
                 FilePanel.this.setLocation(newX, newY);
             }
         });
+
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                FileManager.insertFileDragAndDrop(filepath);
+            }
+        });
+    }
+
+    public void setPath(String path) {
+        this.filepath = path;
     }
 
     static String parseFileName(String _filename) {
