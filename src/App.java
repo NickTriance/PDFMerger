@@ -11,16 +11,20 @@ import java.awt.event.InputEvent;
 import java.io.IOException;
 
 //TODO: Javadocs.
+//TODO: Make file panel not huge.
+
 public class App {
 
     //Things it would be useful to have global access to
     private JFrame frame;
     private JLabel noFilesLabel;
 
+    //singleton
     public static App app;
 
-    
+    //Create the app
     public App() {
+
         //set look and feel by platform.
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -28,6 +32,7 @@ public class App {
             // sqaush
         }
 
+        //initialize file manager
         FileManager.init(this);
 
         //set up singleton
@@ -37,12 +42,20 @@ public class App {
             System.exit(1);
         }
 
+        //create the frame
         frame = createFrame();
 
+        //make the app visible
         frame.setVisible(true);
     }
 
+    /**
+     * Creates the frame for the app
+     * @return JFrame: The app's frame
+     */
     private JFrame createFrame() {
+
+        //create and setup frame
         JFrame frame = new JFrame();
         frame.setSize(640,480);
         frame.setTitle(AppStrings.APP_TITLE);
@@ -57,6 +70,7 @@ public class App {
 
         frame.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 
+        //handlers for drag and drop stuff
         frame.setTransferHandler(new TransferHandler("text") {
             @Override
             public boolean canImport(TransferHandler.TransferSupport support) {
@@ -81,6 +95,10 @@ public class App {
         return frame;
     }
 
+    /**
+     * Create the menu bar for the app
+     * @return JMenuBar: The app's menu bar
+     */
     private JMenuBar createJMenuBar() {
         JMenuBar jmb = new JMenuBar();
         jmb.add(createFileMenu());
@@ -88,6 +106,10 @@ public class App {
         return jmb;
     }
 
+    /**
+     * Create the label for when there are no files open
+     * @return JLabel: the no file label
+     */
     private JLabel createNoFileLabel() {
         JLabel _jlab = new JLabel(AppStrings.APP_NO_FILES);
         _jlab.setFont(new Font(_jlab.getFont().getName(), Font.PLAIN, AppConstants.NO_FILE_LABEL_SIZE));
@@ -123,6 +145,10 @@ public class App {
         return jmFile;
     }
 
+    /**
+     * creates the Help menu for the app.
+     * @return Help menu: JMenu
+     */
     private JMenu createHelpMenu() {
         JMenu jmHelp = new JMenu(AppStrings.APP_MENU_HELP);
         jmHelp.setMnemonic(AppConstants.APP_MNEMONIC_HELP);
@@ -164,15 +190,21 @@ public class App {
         }
     }
 
+    /** Merges all open files together */
     private void mergeFiles() {
         FileManager.mergeFiles();
     }
 
+    /** Redraws the frame */
     public void refreshFrame() {
         frame.revalidate();
         frame.repaint();
     }
 
+    /**
+     * Get app's frame
+     * @return JFrame: the app's frame.
+     */
     public JFrame getFrame() {
         return frame;
     }

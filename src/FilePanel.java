@@ -8,14 +8,22 @@ import java.awt.event.MouseEvent;
 
 public class FilePanel extends JPanel {
 
+    //components of the panel
     private JLabel fileLabel;
     private String fileName;
+
+    //mouse offset for drag and drop
     private Point mouseOffset;
 
+    //path of the file this panel belongs to
     private String filepath;
 
+    /**Create a FilePanel for the given filename
+     * @param filename : String, the filename to assign to this panel
+     */
     public FilePanel(String filename) {
 
+        //create panel
         setLayout(new GridLayout(2,1));
         setBorder(BorderFactory.createLineBorder(AppConstants.PANEL_BORDER, AppConstants.PANEL_BORDER_THICKNESS));
 
@@ -77,14 +85,27 @@ public class FilePanel extends JPanel {
         });
     }
 
+    /**
+     * Set the path this panel is associated with
+     * @param path : String, path of the file
+     */
     public void setPath(String path) {
         this.filepath = path;
     }
 
+    /**
+     * Get the path this panel is associated with
+     * @return String : path of file.
+     */
     public String getPath() {
         return this.filepath;
     }
 
+    /**
+     * Gets the name of a file from its path
+     * @param _filename : String to parse
+     * @return String : name of file.
+     */
     static String parseFileName(String _filename) {
         String s = "";
         if (!(_filename.contains("\\") || _filename.contains("/"))) {

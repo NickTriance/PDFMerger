@@ -17,6 +17,7 @@ public class FileManager {
         fileList = new ArrayList<String>();
     }
 
+    /** Method for opening files. Creates a JFileChooser, allows the user to select a file, and adds the file's path to the list. */
     public static void openFile() {
         
         //create file chooser
@@ -46,6 +47,10 @@ public class FileManager {
         }
     }
 
+    /**
+     * Removes a file's path from the list. Also deletes it's associated filepanel
+     * @param _filepath : String, the path to be removed.
+     */
     public static void removeFile(String _filepath) {
         FilePanel _panel = fileHashtable.get(_filepath);
         app.getFrame().remove(_panel);
@@ -54,7 +59,7 @@ public class FileManager {
         fileList.remove(_filepath);
     }
 
-    //merge all open files together in order.
+    /**Merge all open files together in the order they appear in the file list */
     public static void mergeFiles() {
         String[] files = fileList.toArray(new String[0]); //convert to standard array to make our lives
         
@@ -163,10 +168,18 @@ public class FileManager {
         app.refreshFrame();
     }
 
+    /**Get the index of a given filepath in the list 
+     * @param filePath : String, the filepath to get the index of
+     * @return index : int
+    */
     public static int getIndex(String filePath) {
         return fileList.indexOf(filePath);
     }
 
+    /**
+     * Get the current size of the file list
+     * @return size : int
+     */
     public static int getFileListSize() {
         return fileList.size();
     }
