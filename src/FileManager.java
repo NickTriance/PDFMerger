@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class FileManager {
+
     private static Hashtable<String, FilePanel> fileHashtable; //for storing files and their panels.
     private static ArrayList<String> fileList; //for keeping track of the order of files in the merger.
 
@@ -114,6 +115,7 @@ public class FileManager {
     public static void insertFileDragAndDrop (String filePath) {
 
         //get location of panel
+        //TODO: THIS IS BUGGED, DOESN'T GET LOCATION RELATIVE TO FRAME
         FilePanel _panel = fileHashtable.get(filePath);
         int _panelX = _panel.getX();
         int _panelY = _panel.getY();

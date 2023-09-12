@@ -1,6 +1,8 @@
 import javax.swing.*;
 
 import java.awt.GridLayout;
+import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
@@ -11,9 +13,6 @@ public class FilePanel extends JPanel {
     //components of the panel
     private JLabel fileLabel;
     private String fileName;
-
-    //mouse offset for drag and drop
-    private Point mouseOffset;
 
     //path of the file this panel belongs to
     private String filepath;
@@ -26,14 +25,18 @@ public class FilePanel extends JPanel {
         //create panel
         setLayout(new GridLayout(2,1));
         setBorder(BorderFactory.createLineBorder(AppConstants.PANEL_BORDER, AppConstants.PANEL_BORDER_THICKNESS));
+        setPreferredSize(new Dimension(100, 100));
 
+        //create icon for file
         ImageIcon icon = new ImageIcon(getClass().getResource("images/file.png"));
-        JLabel iconLabel = new JLabel(null, icon, JLabel.CENTER);
+        ImageIcon scaledIcon = Utils.scaleImageIcon(icon, AppConstants.FILE_ICON_SCALE_SIZE, AppConstants.FILE_ICON_SCALE_SIZE);
+        JLabel iconLabel = new JLabel(null, scaledIcon, JLabel.CENTER);
         add(iconLabel);
 
-        fileName = parseFileName(filename);
+        //create label for filename
+        fileName = Utils.parseFileName(filename);
         fileLabel = new JLabel(fileName, JLabel.CENTER);
-        fileLabel.setFont(new Font(fileLabel.getFont().getName(), Font.PLAIN, AppConstants.FILE_LABEL_SIZE));
+        fileLabel.setFont(new Font(fileLabel.getFont().getName(), Font.BOLD, AppConstants.FILE_LABEL_SIZE));
         fileLabel.setHorizontalAlignment(JLabel.CENTER);
         add(fileLabel);
 
@@ -43,9 +46,8 @@ public class FilePanel extends JPanel {
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                mouseOffset = new Point(e.getPoint().x, e.getPoint().y);
                 FilePanel.this.getParent().setComponentZOrder(FilePanel.this, 0);
-                setBorder(BorderFactory.createLineBorder(AppConstants.PANEL_BORDER_SELECTED, AppConstants.PANEL_BORDER_THICKNESS));
+                setBorder(BorderFactory.createLineBorder(AppConstants.PANEL_BORDER_SELECTED, AppConstants.PANEL_BORDER_THICKNESS_SELECTED));
             }
             
         });
@@ -53,8 +55,10 @@ public class FilePanel extends JPanel {
         this.addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
-                Point newLocation = e.getLocationOnScreen();
-                newLocation.translate(-mouseOffset.x, -mouseOffset.y);
+                Point newLocation = e.getPoint();
+                Container parentContainer = getParent();
+                SwingUtilities.convertPointToScreen(newLocation, FilePanel.this);
+                SwingUtilities.convertPointFromScreen(newLocation, parentContainer);
                 
                 //align to nearest grid cell
                 int newX = (int) (Math.round((double) newLocation.x / AppConstants.GRID_CELL_SIZE) * AppConstants.GRID_CELL_SIZE);
@@ -78,6 +82,7 @@ public class FilePanel extends JPanel {
                 if (SwingUtilities.isRightMouseButton(e)) {
                     AppContextMenu ctxMenu = new AppContextMenu();
                     FilePanel clickedPanel = (FilePanel) e.getSource();
+                    System.out.println("here");
                     ctxMenu.setPanel(clickedPanel);
                     ctxMenu.show(clickedPanel, e.getX(), e.getY());
                 }
@@ -99,25 +104,5 @@ public class FilePanel extends JPanel {
      */
     public String getPath() {
         return this.filepath;
-    }
-
-    /**
-     * Gets the name of a file from its path
-     * @param _filename : String to parse
-     * @return String : name of file.
-     */
-    static String parseFileName(String _filename) {
-        String s = "";
-        if (!(_filename.contains("\\") || _filename.contains("/"))) {
-            return _filename;
-        }
-        if (_filename.contains("\\")) {
-            String[] split = _filename.split("\\");
-            s = split[split.length - 1];
-        } else {
-            String[] split = _filename.split("/");
-            s = split[split.length - 1];
-        }
-        return s;
-    }
+    }    
 }

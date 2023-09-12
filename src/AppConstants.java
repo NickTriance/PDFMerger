@@ -2,9 +2,15 @@ import java.awt.Color;
 
 public class AppConstants {
 
-    public static final int GRID_CELL_SIZE = 50;
+    public static final int GRID_CELL_SIZE = 1;
 
-    public static final int PANEL_BORDER_THICKNESS = 3;
+    //panel borders
+    public static final int PANEL_BORDER_THICKNESS = 1;
+    public static final int PANEL_BORDER_THICKNESS_SELECTED = 3;
+
+    //sizes for panels
+    public static final int FILE_ICON_SCALE_SIZE = 75;
+    public static final int FILE_PANEL_DESIRED_SIZE = 150;
 
     //colors
     public static final Color PANEL_BORDER = Color.gray;

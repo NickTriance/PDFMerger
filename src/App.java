@@ -10,9 +10,6 @@ import java.awt.event.InputEvent;
 
 import java.io.IOException;
 
-//TODO: Javadocs.
-//TODO: Make file panel not huge.
-
 public class App {
 
     //Things it would be useful to have global access to
@@ -196,7 +193,10 @@ public class App {
     }
 
     /** Redraws the frame */
+    private int refreshcount = 0;
     public void refreshFrame() {
+        refreshcount++;
+        System.out.println("Frame refreshed " + refreshcount);
         frame.revalidate();
         frame.repaint();
     }
