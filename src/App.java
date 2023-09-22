@@ -58,6 +58,9 @@ public class App {
         frame.setResizable(true);
         frame.setJMenuBar(createJMenuBar());
         
+        ImageIcon icon = new ImageIcon(getClass().getResource("images/appicon.png"));
+        frame.setIconImage(icon.getImage());
+        
         noFilesLabel = createNoFileLabel();
         frame.add(noFilesLabel);
 
