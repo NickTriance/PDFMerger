@@ -63,7 +63,6 @@ public class FilePanel extends JPanel {
                 if (SwingUtilities.isRightMouseButton(e)) {
                     AppContextMenu ctxMenu = new AppContextMenu();
                     FilePanel clickedPanel = (FilePanel) e.getSource();
-                    System.out.println("here");
                     ctxMenu.setPanel(clickedPanel);
                     ctxMenu.show(clickedPanel, e.getX(), e.getY());
                 }

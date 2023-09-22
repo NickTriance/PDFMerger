@@ -1,5 +1,4 @@
 import javax.swing.ImageIcon;
-import javax.swing.SwingUtilities;
 
 import java.awt.*;
 
@@ -36,14 +35,5 @@ public class Utils {
             s = split[split.length - 1];
         }
         return s;
-    }
-
-    public static Point convertPointToParentLocal (Point point, Container child, Container parent) {
-        
-        SwingUtilities.convertPointToScreen(point, child);
-        SwingUtilities.convertPointFromScreen(point, parent);
-
-        Point _ret = point; //I don't know if this is required
-        return _ret;
     }
 }

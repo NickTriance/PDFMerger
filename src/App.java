@@ -4,11 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.InputEvent;
-
-import java.io.IOException;
 
 public class App {
 
@@ -66,28 +62,6 @@ public class App {
         frame.add(noFilesLabel);
 
         frame.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
-
-        //handlers for drag and drop stuff
-        frame.setTransferHandler(new TransferHandler("text") {
-            @Override
-            public boolean canImport(TransferHandler.TransferSupport support) {
-                return true;
-            }
-
-            @Override
-            public boolean importData(TransferHandler.TransferSupport support) {
-                try {
-                    String data = (String) support.getTransferable().getTransferData(DataFlavor.stringFlavor);
-                    
-                    //logic to rearrange filepanels based on data goes here
-
-                    refreshFrame();
-                    return true;
-                } catch (UnsupportedFlavorException | IOException e) {
-                    return false;
-                }
-            }
-        });
 
         return frame;
     }
