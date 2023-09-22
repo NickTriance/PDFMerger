@@ -2,6 +2,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.util.Hashtable;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -120,6 +121,12 @@ public class FileManager {
         int _panelX = _panel.getX();
         int _panelY = _panel.getY();
 
+        Point _panelPoint = Utils.convertPointToParentLocal(new Point(_panelX, _panelY), _panel, App.app.getFrame());
+
+        _panelX = _panelPoint.x;
+        _panelY = _panelPoint.y;
+
+
         /*
          * In order for a file to be before another file in the list, it must be
          * either to the left of or above the other file on screen. 0,0 is the 
@@ -154,7 +161,39 @@ public class FileManager {
         redrawFiles();
     }
 
-    /**redraws the file panels on screen to ensure order is correct */
+    /**
+     * Moves a file to the previous index in the file list.
+     * @param filepath : String, path of file to be moved.
+     */
+    public static void shiftFilePrev(String filepath) {
+        
+        
+        int index = fileList.indexOf(filepath);
+        System.out.println(index);
+         
+        if (index == 0 || index == -1) {
+            return;
+        }
+
+        swapFiles(filepath, fileList.get(index - 1));
+        redrawFiles();
+    }
+
+    /**
+     * Moves a file to the next index in the file list.
+     * @param filepath : String, path of file to be moved.
+     */
+    public static void shiftFileNext(String filepath) {
+        int index = fileList.indexOf(filepath);
+        if (index == fileList.size() - 1 || index == -1 ) {
+            return;
+        }
+
+        swapFiles(filepath, fileList.get(index + 1));
+        redrawFiles();
+    }
+
+    /**Redraws the file panels on screen to ensure order is correct */
     public static void redrawFiles() {
 
         //remove all the files from the frame

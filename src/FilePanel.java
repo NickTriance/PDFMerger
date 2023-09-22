@@ -1,10 +1,8 @@
 import javax.swing.*;
 
 import java.awt.GridLayout;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -23,9 +21,9 @@ public class FilePanel extends JPanel {
     public FilePanel(String filename) {
 
         //create panel
-        setLayout(new GridLayout(2,1));
+        setLayout(new GridLayout(3,1));
         setBorder(BorderFactory.createLineBorder(AppConstants.PANEL_BORDER, AppConstants.PANEL_BORDER_THICKNESS));
-        setPreferredSize(new Dimension(100, 100));
+        setPreferredSize(new Dimension(AppConstants.FILE_PANEL_DESIRED_SIZE, AppConstants.FILE_PANEL_DESIRED_SIZE));
 
         //create icon for file
         ImageIcon icon = new ImageIcon(getClass().getResource("images/file.png"));
@@ -40,41 +38,24 @@ public class FilePanel extends JPanel {
         fileLabel.setHorizontalAlignment(JLabel.CENTER);
         add(fileLabel);
 
-        
+        //create a sub-panel to house buttons to re-order files.
+        JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
 
-        //add a mouse listeners 
-        this.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                FilePanel.this.getParent().setComponentZOrder(FilePanel.this, 0);
-                setBorder(BorderFactory.createLineBorder(AppConstants.PANEL_BORDER_SELECTED, AppConstants.PANEL_BORDER_THICKNESS_SELECTED));
-            }
-            
+        JButton prevButton = new JButton(AppStrings.APP_NAV_PREV);
+        prevButton.addActionListener((ae) -> {
+            System.out.println("PREV");
+            FileManager.shiftFilePrev(filepath);
         });
 
-        this.addMouseMotionListener(new MouseAdapter() {
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                Point newLocation = e.getPoint();
-                Container parentContainer = getParent();
-                SwingUtilities.convertPointToScreen(newLocation, FilePanel.this);
-                SwingUtilities.convertPointFromScreen(newLocation, parentContainer);
-                
-                //align to nearest grid cell
-                int newX = (int) (Math.round((double) newLocation.x / AppConstants.GRID_CELL_SIZE) * AppConstants.GRID_CELL_SIZE);
-                int newY = (int) (Math.round((double) newLocation.y / AppConstants.GRID_CELL_SIZE) * AppConstants.GRID_CELL_SIZE);
-
-                FilePanel.this.setLocation(newX, newY);
-            }
+        JButton nextButton = new JButton(AppStrings.APP_NAV_NEXT);
+        nextButton.addActionListener((ae) -> {
+            System.out.println("NEXT");
+            FileManager.shiftFileNext(filepath);
         });
 
-        this.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                FileManager.insertFileDragAndDrop(filepath);
-                setBorder(BorderFactory.createLineBorder(AppConstants.PANEL_BORDER, AppConstants.PANEL_BORDER_THICKNESS));
-            }
-        });
+        buttonPanel.add(prevButton);
+        buttonPanel.add(nextButton);
+        add(buttonPanel);
 
         this.addMouseListener(new MouseAdapter() {
             @Override

@@ -193,10 +193,7 @@ public class App {
     }
 
     /** Redraws the frame */
-    private int refreshcount = 0;
     public void refreshFrame() {
-        refreshcount++;
-        System.out.println("Frame refreshed " + refreshcount);
         frame.revalidate();
         frame.repaint();
     }

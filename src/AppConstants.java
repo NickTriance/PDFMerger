@@ -10,7 +10,7 @@ public class AppConstants {
 
     //sizes for panels
     public static final int FILE_ICON_SCALE_SIZE = 75;
-    public static final int FILE_PANEL_DESIRED_SIZE = 150;
+    public static final int FILE_PANEL_DESIRED_SIZE = 175;
 
     //colors
     public static final Color PANEL_BORDER = Color.gray;
