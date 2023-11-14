@@ -74,7 +74,13 @@ public class FileManager {
         int saveChoice = fileChooser.showSaveDialog(app.getFrame());
         if (saveChoice == JFileChooser.APPROVE_OPTION) {
             try {
-                PDFMerger.merge(files, fileChooser.getSelectedFile().getAbsolutePath());
+                String filePath = fileChooser.getSelectedFile().getAbsolutePath();
+
+                //quick check to make sure that the file name the user chose ends in .pdf, if it doesn't, we will add it for them.
+                if (!(filePath.substring(filePath.length() - 4).equals(".pdf"))) {
+                    filePath+=".pdf";
+                }
+                PDFMerger.merge(files, filePath);
                 JOptionPane.showMessageDialog(app.getFrame(), "Done", null, JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(app.getFrame(), "Failed to save file " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
