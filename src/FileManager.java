@@ -62,6 +62,13 @@ public class FileManager {
 
     /**Merge all open files together in the order they appear in the file list */
     public static void mergeFiles() {
+
+        //display an error if nothing there is nothing to merge.
+        if (fileList.size() == 0) {
+            JOptionPane.showMessageDialog(app.getFrame(), "Cannot save file: no files are currently open!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         String[] files = fileList.toArray(new String[0]); //convert to standard array to make our lives easier
         
         //create file chooser and set filter
