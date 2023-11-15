@@ -62,7 +62,7 @@ public class FileManager {
 
     /**Merge all open files together in the order they appear in the file list */
     public static void mergeFiles() {
-        String[] files = fileList.toArray(new String[0]); //convert to standard array to make our lives
+        String[] files = fileList.toArray(new String[0]); //convert to standard array to make our lives easier
         
         //create file chooser and set filter
         JFileChooser fileChooser = new JFileChooser();
