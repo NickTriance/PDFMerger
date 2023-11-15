@@ -24,7 +24,7 @@ public class FileManager {
         //create file chooser
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setAcceptAllFileFilterUsed(false);
-        FileNameExtensionFilter pdfFilter = new FileNameExtensionFilter("PDF Documents", "pdf");
+        FileNameExtensionFilter pdfFilter = new FileNameExtensionFilter(AppStrings.APP_MENU_FILE_EXTENSION_FILTER_DESCRIPTION, AppStrings.APP_MENU_FILE_EXTENSION_FILTER);
         fileChooser.setFileFilter(pdfFilter);
         
         //open the file chooser
@@ -35,7 +35,7 @@ public class FileManager {
             String filePath = fileChooser.getSelectedFile().getAbsolutePath();
             //ensure that we don't open duplicates.
             if (fileList.contains(filePath)) {
-                JOptionPane.showMessageDialog(app.getFrame(), "Selected file is already open.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(app.getFrame(), AppStrings.APP_ERROR_FILE_OPEN, AppStrings.APP_ERROR_TITLE, JOptionPane.ERROR_MESSAGE);
                 return;
             } 
             String fileName = fileChooser.getSelectedFile().getName();
@@ -65,7 +65,7 @@ public class FileManager {
 
         //display an error if nothing there is nothing to merge.
         if (fileList.size() == 0) {
-            JOptionPane.showMessageDialog(app.getFrame(), "Cannot save file: no files are currently open!", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(app.getFrame(), AppStrings.APP_ERROR_NO_FILES, AppStrings.APP_ERROR_TITLE, JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -74,7 +74,7 @@ public class FileManager {
         //create file chooser and set filter
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setAcceptAllFileFilterUsed(false);
-        FileNameExtensionFilter pdfFilter = new FileNameExtensionFilter("PDF Documents", "pdf");
+        FileNameExtensionFilter pdfFilter = new FileNameExtensionFilter(AppStrings.APP_MENU_FILE_EXTENSION_FILTER_DESCRIPTION, AppStrings.APP_MENU_FILE_EXTENSION_FILTER);
         fileChooser.setFileFilter(pdfFilter);
 
         //merge and save
@@ -84,13 +84,13 @@ public class FileManager {
                 String filePath = fileChooser.getSelectedFile().getAbsolutePath();
 
                 //quick check to make sure that the file name the user chose ends in .pdf, if it doesn't, we will add it for them.
-                if (!(filePath.substring(filePath.length() - 4).equals(".pdf"))) {
-                    filePath+=".pdf";
+                if (!(filePath.substring(filePath.length() - 4).equals(AppStrings.APP_MENU_FILE_EXTENSION))) {
+                    filePath+=AppStrings.APP_MENU_FILE_EXTENSION;
                 }
                 PDFMerger.merge(files, filePath);
-                JOptionPane.showMessageDialog(app.getFrame(), "Done", null, JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(app.getFrame(), AppStrings.APP_MENU_INFO_COMPLETE, AppStrings.APP_MENU_INFO_TITLE, JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(app.getFrame(), "Failed to save file " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(app.getFrame(), AppStrings.APP_ERROR_SAVE_FAIL + e.getMessage(), AppStrings.APP_ERROR_TITLE, JOptionPane.ERROR_MESSAGE);
             }
         }
     }
