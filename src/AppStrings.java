@@ -13,7 +13,7 @@ public class AppStrings {
     public static final String APP_MENU_HELP_VIEW_STRING = "Add PDF files with File -> Open.\nArrange with Arrows.\nExport with File -> Save/Export.\nRight-Click to remove files";
     public static final String APP_MENU_HELP_ABOUT = "About...";
     public static final String APP_MENU_HELP_ABOUT_TITLE = "About";
-    public static final String APP_MENU_HELP_ABOUT_STRING = "PDFMerger V1.0.0 by NickTriance \n www.nicktriance.com";
+    public static final String APP_MENU_HELP_ABOUT_STRING = "PDFMerger V1.0.0 by Nick Triance \n www.nicktriance.com";
     public static final String APP_MENU_FILE_EXTENSION = ".pdf";
     public static final String APP_MENU_FILE_EXTENSION_FILTER = "pdf";
     public static final String APP_MENU_FILE_EXTENSION_FILTER_DESCRIPTION = "PDF Documents";
