@@ -7,8 +7,10 @@ import java.util.Collections;
 
 public class FileManager {
 
-    private static Hashtable<String, FilePanel> fileHashtable; //for storing files and their panels.
-    private static ArrayList<String> fileList; //for keeping track of the order of files in the merger.
+    private static Hashtable<String, FilePanel> fileHashtable; // for storing files and their panels.
+    private static ArrayList<String> fileList; // for keeping track of the order of files in the merger.
+    
+    private static JFileChooser fileChooser; // 
 
     private static App app;
 
@@ -16,16 +18,16 @@ public class FileManager {
         app = _app;
         fileHashtable = new Hashtable<String, FilePanel>();
         fileList = new ArrayList<String>();
+
+        // Initialize file chooser.
+        fileChooser = new JFileChooser();
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        FileNameExtensionFilter pdfFilter = new FileNameExtensionFilter(AppStrings.APP_MENU_FILE_EXTENSION_FILTER_DESCRIPTION, AppStrings.APP_MENU_FILE_EXTENSION_FILTER);
+        fileChooser.setFileFilter(pdfFilter);
     }
 
     /** Method for opening files. Creates a JFileChooser, allows the user to select a file, and adds the file's path to the list. */
     public static void openFile() {
-        
-        //create file chooser
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setAcceptAllFileFilterUsed(false);
-        FileNameExtensionFilter pdfFilter = new FileNameExtensionFilter(AppStrings.APP_MENU_FILE_EXTENSION_FILTER_DESCRIPTION, AppStrings.APP_MENU_FILE_EXTENSION_FILTER);
-        fileChooser.setFileFilter(pdfFilter);
         
         //open the file chooser
         int returnVal = fileChooser.showOpenDialog(app.getFrame());
