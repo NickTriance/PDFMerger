@@ -9,9 +9,8 @@ import java.awt.event.MouseEvent;
 public class FilePanel extends JPanel {
 
     //components of the panel
-    private JLabel fileLabel;
+    private JTextArea fileLabel;
     private String fileName;
-
     //path of the file this panel belongs to
     private String filepath;
 
@@ -33,9 +32,11 @@ public class FilePanel extends JPanel {
 
         //create label for filename
         fileName = Utils.parseFileName(filename);
-        fileLabel = new JLabel(fileName, JLabel.CENTER);
+        fileLabel = new JTextArea();
+        fileLabel.setEditable(false);
+        fileLabel.setText(fileName);
+        fileLabel.setLineWrap(true);
         fileLabel.setFont(new Font(fileLabel.getFont().getName(), Font.BOLD, AppConstants.FILE_LABEL_SIZE));
-        fileLabel.setHorizontalAlignment(JLabel.CENTER);
         add(fileLabel);
 
         //create a sub-panel to house buttons to re-order files.

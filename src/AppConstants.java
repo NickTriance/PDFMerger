@@ -11,13 +11,14 @@ public class AppConstants {
     //sizes for panels
     public static final int FILE_ICON_SCALE_SIZE = 75;
     public static final int FILE_PANEL_DESIRED_SIZE = 175;
+    public static final int FILE_PANEL_NAME_MAX_WIDTH = 75;
 
     //colors
     public static final Color PANEL_BORDER = Color.gray;
     public static final Color PANEL_BORDER_SELECTED = Color.blue;
 
     //font sizes
-    public static final int FILE_LABEL_SIZE = 18;
+    public static final int FILE_LABEL_SIZE = 12;
     public static final int NO_FILE_LABEL_SIZE = 24;
 
     //mnemonics
