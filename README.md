@@ -4,4 +4,4 @@ kind of worked.
 
 So, out of spite, I made this simple program that takes multiple PDFs, and combines them into one, big PDF. That's it. That's all it does.
 
-If just want to download it, executable versions can be found at https://www.nicktriance.com/downloads.
+If just want to download it, executable (.exe & .jar) versions can be found at https://www.nicktriance.com/downloads.
