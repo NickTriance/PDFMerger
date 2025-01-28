@@ -1,10 +1,13 @@
 import javax.swing.*;
 
+/**
+ * Custom context menu for this app. Used to allow users to remove PDF files from the merge.
+ */
 public class AppContextMenu extends JPopupMenu {
 
-    private FilePanel panel; //panel that created this popup menu
+    private FilePanel panel; // The panel that created this popup menu.
     
-    /**Creates a context menu */
+    /** Creates a context menu. */
     public AppContextMenu() {
         JMenuItem jpmDel = new JMenuItem(AppStrings.CONTEXT_MENU_DELETE);
         jpmDel.setMnemonic('R');
@@ -15,10 +18,10 @@ public class AppContextMenu extends JPopupMenu {
     } 
 
     /**
-     * set the panel that created this popup menu
-     * @param _panel : FilePanel, panel that created this popup menu
+     * Set the panel that created this popup menu.
+     * @param panel : FilePanel, panel that created this popup menu.
      */
-    public void setPanel(FilePanel _panel) {
-        this.panel = _panel;
+    public void setPanel(FilePanel panel) {
+        this.panel = panel;
     }
 }

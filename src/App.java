@@ -8,47 +8,47 @@ import java.awt.event.InputEvent;
 
 public class App {
 
-    //Things it would be useful to have global access to
+    // Things it would be useful to have global access to...
     private JFrame frame;
     private JLabel noFilesLabel;
 
-    //singleton
+    // Singleton
     public static App app;
 
-    //Create the app
+    // Create the app.
     public App() {
 
-        //set look and feel by platform.
+        // Set look and feel by platform.
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
             // sqaush
         }
 
-        //initialize file manager
+        // Initialize file manager
         FileManager.init(this);
 
-        //set up singleton
+        // Set up singleton.
         if (app == null) {
             app = this;
         } else {
             System.exit(1);
         }
 
-        //create the frame
+        // Create the frame.
         frame = createFrame();
 
-        //make the app visible
+        // Make the app visible.
         frame.setVisible(true);
     }
 
     /**
-     * Creates the frame for the app
-     * @return JFrame: The app's frame
+     * Creates the frame for the app.
+     * @return JFrame: the app's frame.
      */
     private JFrame createFrame() {
 
-        //create and setup frame
+        // Create and setup frame.
         JFrame frame = new JFrame();
         frame.setSize(640,480);
         frame.setTitle(AppStrings.APP_TITLE);
@@ -70,8 +70,8 @@ public class App {
     }
 
     /**
-     * Create the menu bar for the app
-     * @return JMenuBar: The app's menu bar
+     * Create the menu bar for the app.
+     * @return JMenuBar: the app's menu bar.
      */
     private JMenuBar createJMenuBar() {
         JMenuBar jmb = new JMenuBar();
@@ -81,14 +81,14 @@ public class App {
     }
 
     /**
-     * Create the label for when there are no files open
-     * @return JLabel: the no file label
+     * Create the label that is displayed when there are currently no files open.
+     * @return JLabel: the no file label.
      */
     private JLabel createNoFileLabel() {
-        JLabel _jlab = new JLabel(AppStrings.APP_NO_FILES);
-        _jlab.setFont(new Font(_jlab.getFont().getName(), Font.PLAIN, AppConstants.NO_FILE_LABEL_SIZE));
-        _jlab.setHorizontalAlignment(JLabel.CENTER);
-        return _jlab;
+        JLabel jlab = new JLabel(AppStrings.APP_NO_FILES);
+        jlab.setFont(new Font(jlab.getFont().getName(), Font.PLAIN, AppConstants.NO_FILE_LABEL_SIZE));
+        jlab.setHorizontalAlignment(JLabel.CENTER);
+        return jlab;
     }
 
     /**
@@ -99,7 +99,7 @@ public class App {
         JMenu jmFile = new JMenu(AppStrings.APP_MENU_FILE);
         jmFile.setMnemonic(AppConstants.APP_MNEMONIC_FILE);
 
-        //create the menu for opening files
+        // Create the menu for opening files
         JMenuItem jmiOpen = new JMenuItem(AppStrings.APP_MENU_FILE_OPEN);
         jmiOpen.setMnemonic(AppConstants.APP_MNEMONIC_OPEN);
         jmiOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
@@ -120,8 +120,8 @@ public class App {
     }
 
     /**
-     * creates the Help menu for the app.
-     * @return Help menu: JMenu
+     * Creates the Help menu for the app.
+     * @return Help menu: JMenu.
      */
     private JMenu createHelpMenu() {
         JMenu jmHelp = new JMenu(AppStrings.APP_MENU_HELP);
@@ -153,36 +153,39 @@ public class App {
     }
     
     /**
-     * Removes files from the file list
+     * Removes files from the file list.
      * @param file : String, the file to be removed.
      */
-    public void removeFile(String _filepath) {
-        FileManager.removeFile(_filepath);
+    public void removeFile(String file) {
+        FileManager.removeFile(file);
         if (FileManager.getFileListSize() == 0) {
             frame.add(noFilesLabel);
             refreshFrame();
         }
     }
 
-    /** Merges all open files together */
+    /** Merges all open files together. */
     private void mergeFiles() {
         FileManager.mergeFiles();
     }
 
-    /** Redraws the frame */
+    /** Redraws the frame. */
     public void refreshFrame() {
         frame.revalidate();
         frame.repaint();
     }
 
     /**
-     * Get app's frame
+     * Get app's frame.
      * @return JFrame: the app's frame.
      */
     public JFrame getFrame() {
         return frame;
     }
 
+    /**
+     * Entry point.
+     */
     public static void main(String[] args) throws Exception {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {

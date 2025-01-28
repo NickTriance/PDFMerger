@@ -5,7 +5,7 @@ import java.awt.*;
 public class Utils {
 
     /**
-     * Scale an ImageIcon to a specified width and height
+     * Scale an ImageIcon to a specified width and height.
      * @param icon : ImageIcon, icon to scale
      * @param width : int, width of scaled icon
      * @param height int, height of scaled icon
@@ -18,20 +18,20 @@ public class Utils {
     }
 
     /**
-     * Gets the name of a file from its path
-     * @param _filename : String to parse
+     * Gets the name of a file from its path.
+     * @param filename : String to parse.
      * @return String : name of file.
      */
-    public static String parseFileName(String _filename) {
+    public static String parseFileName(String filename) {
         String s = "";
-        if (!(_filename.contains("\\") || _filename.contains("/"))) {
-            return _filename;
+        if (!(filename.contains("\\") || filename.contains("/"))) {
+            return filename;
         }
-        if (_filename.contains("\\")) {
-            String[] split = _filename.split("\\");
+        if (filename.contains("\\")) {
+            String[] split = filename.split("\\");
             s = split[split.length - 1];
         } else {
-            String[] split = _filename.split("/");
+            String[] split = filename.split("/");
             s = split[split.length - 1];
         }
         return s;

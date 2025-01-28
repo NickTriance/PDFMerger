@@ -1,3 +1,4 @@
+/** Strings used by the App, consolidated for easy editing. */
 public class AppStrings {
 
     public static final String APP_TITLE = "PDFMerger";
