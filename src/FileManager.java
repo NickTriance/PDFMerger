@@ -5,42 +5,51 @@ import java.util.Hashtable;
 import java.util.ArrayList;
 import java.util.Collections;
 
+
 public class FileManager {
 
-    private static Hashtable<String, FilePanel> fileHashtable; // for storing files and their panels.
-    private static ArrayList<String> fileList; // for keeping track of the order of files in the merger.
+    private static Hashtable<String, FilePanel> fileHashtable; // For storing files and their panels.
+    private static ArrayList<String> fileList; // For keeping track of the order of files in the merger.
     
-    private static JFileChooser fileChooser; // 
+    private static JFileChooser openFileChooser; 
 
     private static App app;
 
-    public static void init(App _app) {
-        app = _app;
-        fileHashtable = new Hashtable<String, FilePanel>();
-        fileList = new ArrayList<String>();
+    /**
+     * Initializes the FileManager.
+     * @param app
+     */
+    public static void init(App app) {
+
+        FileManager.app = app;
+        FileManager.fileHashtable = new Hashtable<String, FilePanel>();
+        FileManager.fileList = new ArrayList<String>();
 
         // Initialize file chooser.
-        fileChooser = new JFileChooser();
-        fileChooser.setAcceptAllFileFilterUsed(false);
+        openFileChooser = new JFileChooser();
+        openFileChooser.setAcceptAllFileFilterUsed(false);
         FileNameExtensionFilter pdfFilter = new FileNameExtensionFilter(AppStrings.APP_MENU_FILE_EXTENSION_FILTER_DESCRIPTION, AppStrings.APP_MENU_FILE_EXTENSION_FILTER);
-        fileChooser.setFileFilter(pdfFilter);
+        openFileChooser.setFileFilter(pdfFilter);
     }
 
     /** Method for opening files. Creates a JFileChooser, allows the user to select a file, and adds the file's path to the list. */
     public static void openFile() {
         
-        //open the file chooser
-        int returnVal = fileChooser.showOpenDialog(app.getFrame());
+        // Open the file chooser.
+        int returnVal = openFileChooser.showOpenDialog(app.getFrame());
         
-        //add the file
+        // Add the file
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            String filePath = fileChooser.getSelectedFile().getAbsolutePath();
-            //ensure that we don't open duplicates.
+
+            String filePath = openFileChooser.getSelectedFile().getAbsolutePath();
+
+            // Ensure that we don't open duplicates.
             if (fileList.contains(filePath)) {
                 JOptionPane.showMessageDialog(app.getFrame(), AppStrings.APP_ERROR_FILE_OPEN, AppStrings.APP_ERROR_TITLE, JOptionPane.ERROR_MESSAGE);
                 return;
             } 
-            String fileName = fileChooser.getSelectedFile().getName();
+
+            String fileName = openFileChooser.getSelectedFile().getName();
             FilePanel filePanel = new FilePanel(fileName);
             filePanel.setPath(filePath);
             fileHashtable.put(filePath, filePanel);
@@ -51,7 +60,7 @@ public class FileManager {
     }
 
     /**
-     * Removes a file's path from the list. Also deletes it's associated filepanel
+     * Removes a file's path from the list. Also deletes it's associated filepanel.
      * @param _filepath : String, the path to be removed.
      */
     public static void removeFile(String _filepath) {
@@ -62,33 +71,34 @@ public class FileManager {
         fileList.remove(_filepath);
     }
 
-    /**Merge all open files together in the order they appear in the file list */
+    /**Merge all open files together in the order they appear in the file list. */
     public static void mergeFiles() {
 
-        //display an error if nothing there is nothing to merge.
+        // Display an error if nothing there is nothing to merge.
         if (fileList.size() == 0) {
             JOptionPane.showMessageDialog(app.getFrame(), AppStrings.APP_ERROR_NO_FILES, AppStrings.APP_ERROR_TITLE, JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        String[] files = fileList.toArray(new String[0]); //convert to standard array to make our lives easier
+        String[] files = fileList.toArray(new String[0]); // Convert to standard array to make our lives easier.
         
-        //create file chooser and set filter
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setAcceptAllFileFilterUsed(false);
+        // Create file chooser for the save file and set filter.
+        JFileChooser saveFileChooser = new JFileChooser();
+        saveFileChooser.setAcceptAllFileFilterUsed(false);
         FileNameExtensionFilter pdfFilter = new FileNameExtensionFilter(AppStrings.APP_MENU_FILE_EXTENSION_FILTER_DESCRIPTION, AppStrings.APP_MENU_FILE_EXTENSION_FILTER);
-        fileChooser.setFileFilter(pdfFilter);
+        saveFileChooser.setFileFilter(pdfFilter);
 
-        //merge and save
-        int saveChoice = fileChooser.showSaveDialog(app.getFrame());
+        // Merge and save.
+        int saveChoice = saveFileChooser.showSaveDialog(app.getFrame());
         if (saveChoice == JFileChooser.APPROVE_OPTION) {
             try {
-                String filePath = fileChooser.getSelectedFile().getAbsolutePath();
+                String filePath = saveFileChooser.getSelectedFile().getAbsolutePath();
 
-                //quick check to make sure that the file name the user chose ends in .pdf, if it doesn't, we will add it for them.
+                // Quick check to make sure that the file name the user chose ends in .pdf, if it doesn't, we will add it for them.
                 if (!(filePath.substring(filePath.length() - 4).equals(AppStrings.APP_MENU_FILE_EXTENSION))) {
                     filePath+=AppStrings.APP_MENU_FILE_EXTENSION;
                 }
+
                 PDFMerger.merge(files, filePath);
                 JOptionPane.showMessageDialog(app.getFrame(), AppStrings.APP_MENU_INFO_COMPLETE, AppStrings.APP_MENU_INFO_TITLE, JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception e) {
@@ -110,7 +120,7 @@ public class FileManager {
     }
 
     /**
-     * Moves a file to a given index in the file list
+     * Moves a file to a given index in the file list.
      * @param filePath
      * @param index
      */
@@ -157,15 +167,15 @@ public class FileManager {
         redrawFiles();
     }
 
-    /**Redraws the file panels on screen, taking advantage of our FlowLayout to ensure order is correct */
+    /**Redraws the file panels on screen, taking advantage of our FlowLayout to ensure order is correct. */
     public static void redrawFiles() {
 
-        //remove all the files from the frame
+        // Remove all the files from the frame
         for (int i = 0; i < fileList.size(); i++) {
             app.getFrame().remove(fileHashtable.get(fileList.get(i)));
         }
 
-        //add them all back. the frame's FlowLayout will make sure the order is right
+        // Add them all back. the frame's FlowLayout will make sure the order is right
         for (int i = 0; i < fileList.size(); i++) {
             app.getFrame().add(fileHashtable.get(fileList.get(i)));
         }
@@ -174,7 +184,7 @@ public class FileManager {
     }
 
     /**
-     * Get the current size of the file list
+     * Get the current size of the file list.
      * @return size : int
      */
     public static int getFileListSize() {
